@@ -3,7 +3,7 @@ import java.util.List;
 
 /**
  * @ClassName: CountPrimes
- * @Description: 质数
+ * @Description: 质数个数
  * 返回所有小于n的质数的个数
  * @Author: zhaooo
  * @Date: 2022/6/30/22:14
