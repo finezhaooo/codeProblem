@@ -18,6 +18,7 @@ public class JumpGameII {
         int len = nums.length, l = 0, r = 0, step = 0;
         int[] dp = new int[len];
         while (r < len - 1) {
+            // max记录从当前区间能一步能到的最大位置
             int max = r;
             // 每次确定一个区间的最小跳跃次数
             for (int i = l; i <= r; i++) {
