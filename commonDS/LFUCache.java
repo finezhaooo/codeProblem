@@ -100,19 +100,19 @@ class LFUCache {
         set.remove(delNode);
         return delNode;
     }
-}
 
-class Node {
-    int key;
-    int value;
-    int freq;
+    class Node {
+        int key;
+        int value;
+        int freq;
 
-    public Node() {
-        this.freq = 1;
-    }
+        public Node() {
+            this.freq = 1;
+        }
 
-    public Node(int key, int value) {
-        this.key = key;
-        this.value = value;
+        public Node(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 }
