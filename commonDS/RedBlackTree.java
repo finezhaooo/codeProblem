@@ -4,9 +4,9 @@
  * @Author: zhaooo
  * @Date: 2022/7/29/10:47
  */
-public class BlackRedTree {
+public class RedBlackTree {
 
-    class BlackRedTreeNode<T>{
+    class RedBlackTreeNode<T>{
         
     }
 }
