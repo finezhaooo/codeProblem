@@ -2,7 +2,7 @@ import java.util.*;
 
 /**
  * @ClassName: LFUCache
- * @Description: 460. LFU 缓存
+ * @Description: LFU 缓存
  * 双向链表直接使用LinkedHashSet
  * https://leetcode.cn/problems/lfu-cache/solutions/48636/java-13ms-shuang-100-shuang-xiang-lian-biao-duo-ji/
  * @Author: zhaooo
@@ -65,16 +65,12 @@ class LFUCache {
         int freq = node.freq;
         LinkedHashSet<Node> set = freqMap.get(freq);
         set.remove(node);
-        if (freq == min && set.size() == 0) {
+        if (freq == min && set.isEmpty()) {
             min = freq + 1;
         }
         // 加入新freq对应的链表
         node.freq++;
-        LinkedHashSet<Node> newSet = freqMap.get(freq + 1);
-        if (newSet == null) {
-            newSet = new LinkedHashSet<>();
-            freqMap.put(freq + 1, newSet);
-        }
+        LinkedHashSet<Node> newSet = freqMap.computeIfAbsent(freq + 1, k -> new LinkedHashSet<>());
         newSet.add(node);
     }
 
@@ -84,11 +80,7 @@ class LFUCache {
      * @param node
      */
     void addOneNode(Node node) {
-        LinkedHashSet<Node> set = freqMap.get(1);
-        if (set == null) {
-            set = new LinkedHashSet<>();
-            freqMap.put(1, set);
-        }
+        LinkedHashSet<Node> set = freqMap.computeIfAbsent(1, k -> new LinkedHashSet<>());
         set.add(node);
         min = 1;
     }
@@ -113,6 +105,7 @@ class LFUCache {
         public Node(int key, int value) {
             this.key = key;
             this.value = value;
+            this.freq = 1;
         }
     }
 }
