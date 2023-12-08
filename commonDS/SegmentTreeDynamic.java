@@ -17,25 +17,26 @@ public class SegmentTreeDynamic {
     }
 
     // 在区间 [l, r] 中更新区间 [start, end] 的结果
+    // Node范围是[start, end]，更新范围是[l, r]
     public void update(Node node, int start, int end, int l, int r, int add) {
-        // 要更新的区间（即[l, r]）大于该点（该点范围为[start, end]）时懒更新
+        // [l, r]包裹[start, end]（Node）时才能更新值
         if (l <= start && end <= r) {
             node.val += (end - start + 1) * add;
-            //? 也可为node.add=add 因为原add要么为0，要么已经包含在node.val里
+            // 也可为node.add=add 因为原add要么为0（每次向下都要pushDown使用懒标记），要么已经包含在node.val里
             // 更新懒标记
             node.add += add;
             return;
         }
-        // [l, r]不能完全包裹[start, end]
+        // [l, r]不能完全包裹[start, end]（Node）
+        // 取Node的中点，分别递归更新左右子树
         int mid = (start + end) >> 1;
-        // 开点和更新
+        // 开点和使用懒标记，注意此时还未更新Node的值，在pushUp中更新
         pushDown(node, mid - start + 1, end - mid);
-        // 递归查询
-        // [l,r]包含该点的左孩子
+        // [l,r]和Node的左孩子有交集
         if (l <= mid) {
             update(node.left, start, mid, l, r, add);
         }
-        // [l,r]包含该点的右孩子
+        // [l,r]和Node的右孩子有交集
         if (r > mid) {
             update(node.right, mid + 1, end, l, r, add);
         }
@@ -44,19 +45,14 @@ public class SegmentTreeDynamic {
     }
 
     public int query(Node node, int start, int end, int l, int r) {
-        // 该点（[start, end]）在查询区间（[l, r]）内
         if (l <= start && end <= r) {
             return node.val;
         }
         int mid = (start + end) >> 1, ans = 0;
-        // 开点和更新
         pushDown(node, mid - start + 1, end - mid);
-        // 结果可以拆分为不同区间的结果
-        // [l,r]包含该点的左孩子
         if (l <= mid) {
             ans += query(node.left, start, mid, l, r);
         }
-        // [l,r]包含该点的右孩子
         if (r > mid) {
             ans += query(node.right, mid + 1, end, l, r);
         }
