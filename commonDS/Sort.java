@@ -20,6 +20,7 @@ public class Sort {
             }
         }
 
+        // 填充
         private int partition(int[] arr, int left, int right) {
             // 取左边界为枢轴，第一个空位为左侧
             // 也可以随机取一点为枢轴
@@ -40,6 +41,31 @@ public class Sort {
             // 退出时left==right，pivot放入
             arr[left] = pivot;
             return left;
+        }
+
+        // 交换
+        private int partition2(int[] arr, int left, int right) {
+            // 取左边界为枢轴
+            int pivot = arr[left];
+            int idx = left;
+            // 将大于pivot的数放入右侧
+            for (int i = left + 1; i <= right; i++) {
+                if (arr[i] < pivot) {
+                    // i >= idx+1
+                    swap(arr, i, idx + 1);
+                    idx++;
+                }
+            }
+            // 排序后[pivot, 大于pivot, 小于pivot] [left ,[left+1, idx], [idx+1, right]]
+            // 将pivot放入中间
+            swap(arr, left, idx);
+            return idx;
+        }
+
+        private void swap(int[] arr, int i, int j) {
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
         }
     }
 
@@ -124,7 +150,7 @@ public class Sort {
     }
 
     public class BucketSor {
-        //将数组分到有限数量的桶子里。每个桶子再个别排序（有可能再使用别的排序算法或是以递归方式继续使用桶排序进行排序）
+        // 将数组分到有限数量的桶子里。每个桶子再个别排序（有可能再使用别的排序算法或是以递归方式继续使用桶排序进行排序）
         public int[] bucketSort(int[] arr, int max) {
             int[] buckets;
             buckets = new int[max];
@@ -147,20 +173,20 @@ public class Sort {
             int len = arr.length;
             int i, j, k;
             for (i = 1; i < len; i++) {
-                //为a[i]在前面的a[0...i-1]有序区间中找一个合适的位置，然后a[i]插入a[j+1]
+                // 为a[i]在前面的a[0...i-1]有序区间中找一个合适的位置，然后a[i]插入a[j+1]
                 for (j = i - 1; j >= 0; j--) {
                     if (arr[j] < arr[i]) {
                         break;
                     }
                 }
-                //如找到了一个合适的位置
+                // 如找到了一个合适的位置
                 if (j != i - 1) {
-                    //将比a[i]大的数据向后移，将[j+1,i-1]移动到[j+2,i]，然后将a[i]放入[j+1]
+                    // 将比a[i]大的数据向后移，将[j+1,i-1]移动到[j+2,i]，然后将a[i]放入[j+1]
                     int temp = arr[i];
                     for (k = i - 1; k > j; k--) {
                         arr[k + 1] = arr[k];
                     }
-                    //将a[i]放到正确位置上
+                    // 将a[i]放到正确位置上
                     arr[k + 1] = temp;
                 }
             }
@@ -193,7 +219,7 @@ public class Sort {
 
         private void mergeOfTwoSortedArray(int[] nums, int left, int mid, int right, int[] temp) {
             //[left, mid] 有序，[mid + 1, right] 有序
-            //public static native void arraycopy(Object src, int  srcPos, Object dest, int destPos, int length);
+            // public static native void arraycopy(Object src, int  srcPos, Object dest, int destPos, int length);
             System.arraycopy(nums, left, temp, left, right + 1 - left);
             int i = left;
             int j = mid + 1;
