@@ -1,7 +1,6 @@
 package normal;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @ClassName: FindKPairsWithSmallestSums
@@ -21,7 +20,7 @@ public class FindKPairsWithSmallestSums {
         while (ans.size() < k && !q.isEmpty()) {
             int[] poll = q.poll();
             int a = poll[0], b = poll[1];
-            ans.add(new ArrayList<>() {{
+            ans.add(new ArrayList<Integer>() {{
                 add(nums1[a]);
                 add(nums2[b]);
             }});
