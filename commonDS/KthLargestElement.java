@@ -8,6 +8,7 @@ import java.util.Queue;
  * @Date: 2022/7/11/10:43
  */
 public class KthLargestElement {
+
     /**
      * 快速排序分治
      * @param nums
@@ -24,6 +25,7 @@ public class KthLargestElement {
             if (mid == k) {
                 return nums[mid];
             }
+            // 二分思想
             l = mid < k ? mid + 1 : l;
             r = mid > k ? mid - 1 : r;
         }
@@ -48,6 +50,19 @@ public class KthLargestElement {
         return l;
     }
 
+    public int partition2(int[] nums, int l, int r) {
+        int pivot = nums[l];
+        int idx = l;
+        // 较大元素在前面
+        for (int i = l + 1; i <= r; i++) {
+            if (nums[i] > pivot) {
+                swap(nums, i, ++idx);
+            }
+        }
+        swap(nums, l, idx);
+        return idx;
+    }
+
     /**
      * 堆排序
      * @param nums
@@ -56,20 +71,24 @@ public class KthLargestElement {
      */
     public int findKthLargest2(int[] nums, int k) {
         // 建立容量为k的小根堆，k个最大元素的最小值将为nums[0]
-        for (int i = k - 1; i >= 0; i--) {
+        // 从叶子节点（idx：k / 2）开始向上构建小根堆
+        for (int i = k / 2; i >= 0; i--) {
             heapify(nums, i, k);
         }
-        // 把堆大于堆内最小元素的值加入
+        // 把数组内非堆元素中 大于堆内最小元素的值加入
         for (int i = k; i < nums.length; i++) {
             if (nums[i] > nums[0]) {
                 swap(nums, 0, i);
+                // 加入堆的顶点，从顶点（0）开始堆化
                 heapify(nums, 0, k);
             }
         }
         return nums[0];
     }
 
+    // 在nums中从 i 开始构建堆至 len
     public void heapify(int[] nums, int i, int len) {
+        // i的左孩子i*2+1，右孩子i*2+2
         int lc = (i << 1) + 1, rc = (i << 1) + 2;
         int min = i;
         // 找到最小的子节点
@@ -78,7 +97,7 @@ public class KthLargestElement {
         if (i != min) {
             // 较大元素下沉即较小元素上浮
             swap(nums, i, min);
-            // 不能保证子节点还是小根堆，heapify
+            // 在该子树中重新构建堆（min就是交换前的i）
             heapify(nums, min, len);
         }
     }
@@ -102,11 +121,11 @@ public class KthLargestElement {
             pq.add(nums[i]);
         }
         for (int i = k; i < nums.length; i++) {
-            if (nums[i] > pq.peek()) {
+            if (nums[i] > pq.element()) {
                 pq.poll();
                 pq.add(nums[i]);
             }
         }
-        return pq.peek();
+        return pq.element();
     }
 }
