@@ -83,7 +83,7 @@ public class MaximumSubarray {
             leftCrossMax = Math.max(leftCrossSum, leftCrossMax);
         }
 
-        // 计算包含右侧子序列最后一个元素的子序列最大值
+        // 计算包含右侧子序列第一个元素的子序列最大值
         int rightCrossMax = nums[center + 1];
         int rightCrossSum = 0;
         for (int i = center + 1; i <= end; i++) {
