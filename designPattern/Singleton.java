@@ -1,6 +1,6 @@
 /**
  * @ClassName: Singleton
- * @Description: 单例模式
+ * @Description: g
  *
  * 单例的实现要点
  * 单例模式要求类能够有返回对象一个引用（永远是同一个）和一个获得该实例的方法（必须是静态方法）。
@@ -82,7 +82,7 @@
 
 /**
  * 静态内部类
- * JVM将推迟SingletonHolder的初始化操作，直到开始使用这个类时才初始化，并且由于通过一个静态初始化来初始化Singleton，因此不需要额外的同步。
+ * JVM的类加载是懒加载，直到使用这个类时才加载该类，通过一个静态初始化来初始化Singleton，不需要额外的同步。
  * 当任何一个线程第一次调用getInstance时，都会使SingletonHolder被加载和被初始化，此时静态初始化器将执行Singleton的初始化操作。
  */
 //public class Singleton {
@@ -94,7 +94,7 @@
 //    private Singleton() {
 //    }
 //
-//    private Singleton getInstance() {
+//    public Singleton getInstance() {
 //        return SingletonHolder.INSTANCE;
 //    }
 //}
@@ -102,6 +102,7 @@
 /**
  * 枚举
  * 很简洁的一种实现方式，提供了序列化机制，保证线程安全，绝对防止多次实例化，即使是在面对复杂的序列化或者反射攻击的时候。
+ * 单例序列化与反序列化前后的对象不是同一个  需要重写readResolve方法返回单例
  */
 public enum Singleton {
     INSTANCE;
