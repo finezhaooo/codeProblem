@@ -41,4 +41,32 @@ public class BinaryTreeZigzagLevelOrderTraversal {
         }
         return ret;
     }
+
+    /**
+     * dfs 若为奇数层则头插
+     * @param root
+     * @return
+     */
+    public List<List<Integer>> zigzagLevelOrder2(TreeNode root) {
+        List<List<Integer>> ret = new ArrayList<>();
+        if (root == null) {
+            return ret;
+        }
+        dfs(0, root, ret);
+        return ret;
+    }
+
+    void dfs(int depth, TreeNode root, List<List<Integer>> ret) {
+        if (root == null) {
+            return;
+        }
+        if (depth >= ret.size()) {
+            ret.add(new LinkedList<>());
+        }
+        List<Integer> cur = ret.get(depth);
+        // 若为奇数层则头插
+        cur.add((depth & 1) > 0 ? 0 : cur.size(), root.val);
+        dfs(depth + 1, root.left, ret);
+        dfs(depth + 1, root.right, ret);
+    }
 }
