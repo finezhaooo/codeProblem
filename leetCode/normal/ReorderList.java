@@ -50,7 +50,7 @@ public class ReorderList {
         }
         int len = 0;
         ListNode tmp = head;
-        //求出节点数
+        // 求出节点数
         while (tmp != null) {
             len++;
             tmp = tmp.next;
@@ -58,12 +58,6 @@ public class ReorderList {
         dfs(head, len);
     }
 
-    /**
-     * 返回已经排序好部分的下一个节点，即当前递归的尾节点
-     * @param head
-     * @param len
-     * @return
-     */
     ListNode dfs(ListNode head, int len) {
         if (len == 1) {
             ListNode outTail = head.next;
@@ -75,13 +69,14 @@ public class ReorderList {
             head.next.next = null;
             return outTail;
         }
-        //得到对应的尾节点，并且将头结点和尾节点之间的链表通过递归处理
+        // 得到本层对应的尾节点，并且将头结点和尾节点之间的链表通过递归处理
         ListNode tail = dfs(head.next, len - 2);
-        //中间链表的头结点
-        ListNode subHead = head.next;
-        head.next = tail;
-        //上一层 head 对应的 tail
+        // 外层尾节点
         ListNode outTail = tail.next;
+        // 中间链表的头结点
+        ListNode subHead = head.next;
+        // 连接本层和内层
+        head.next = tail;
         tail.next = subHead;
         return outTail;
     }
