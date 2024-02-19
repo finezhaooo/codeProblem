@@ -13,7 +13,7 @@ public class BinaryTreeMaximumPathSum {
     int ret = Integer.MIN_VALUE;
 
     /**
-     * 模板解法
+     * dfs
      * @param root
      * @return
      */
@@ -25,15 +25,20 @@ public class BinaryTreeMaximumPathSum {
         return ret;
     }
 
+    // 表示以root结尾的路径和最大值
     int dfs(TreeNode root) {
         if (root == null) {
             return 0;
         }
-        // max(dfs(),0)表示在 此处取截至或向下 的最大值
-        // 递归
-        int l = Math.max(0, dfs(root.left));
-        int r = Math.max(0, dfs(root.right));
-        ret = Math.max(l + r + root.val, ret);
-        return Math.max(l, r) + root.val;
+        int l = dfs(root.left);
+        int r = dfs(root.right);
+        // 每次只需要判断包含root路径的最大值 就能判断整个树的所有情况
+        ret = Math.max(root.val + Math.max(l, 0) + Math.max(r, 0), ret);
+        return Math.max(root.val, Math.max(l + root.val, r + root.val));
+        // 或者
+        // int l = Math.max(dfs(root.left), 0);
+        // int r = Math.max(dfs(root.right), 0);
+        // ret = Math.max(root.val + l + r, ret);
+        // return Math.max(l, r) + root.val;
     }
 }
