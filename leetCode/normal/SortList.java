@@ -116,6 +116,53 @@ public class SortList {
         return dummyHead.next;
     }
 
+    /**
+     * 快速排序
+     * @param head
+     * @return
+     */
+    public ListNode sortList3(ListNode head) {
+        return quickSortList(head)[0];
+    }
+
+    // 返回head排序后的头尾节点
+    public ListNode[] quickSortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return new ListNode[]{head, head};
+        }
+        ListNode cur = head.next, lHead = null, rHead = null;
+        // 取head为pivot 逆序会退化为O(n)
+        // 断开head和后面的链接
+        head.next = null;
+        while (cur != null) {
+            ListNode tmp = cur.next;
+            // 头插
+            if (cur.val < head.val) {
+                // lHead(cur)->x->x->null
+                // cur.next = null;
+                cur.next = lHead;
+                lHead = cur;
+            } else {
+                // rHead(cur)->x->x->null
+                cur.next = rHead;
+                rHead = cur;
+            }
+            cur = tmp;
+        }
+        // 分治
+        ListNode[] lSorted = quickSortList(lHead);
+        ListNode[] rSorted = quickSortList(rHead);
+        // 连接pivot和左右链表
+        if (lSorted[1] != null) {
+            lSorted[1].next = head;
+        }
+        if (rSorted[0] != null) {
+            head.next = rSorted[0];
+        }
+        ListNode l = lSorted[0] == null ? head : lSorted[0];
+        ListNode r = rSorted[1] == null ? head : rSorted[1];
+        return new ListNode[]{l, r};
+    }
 
     public ListNode merge(ListNode head1, ListNode head2) {
         ListNode dummyHead = new ListNode(0), temp = dummyHead;
