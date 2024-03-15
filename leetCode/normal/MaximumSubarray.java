@@ -2,7 +2,7 @@ package normal;
 
 /**
  * @ClassName: MaximumSubarray
- * @Description: 53. 最大子数组和
+ * @Description:
  * @Author: zhaooo
  * @Date: 2023/8/16/10:10
  */
@@ -34,20 +34,41 @@ public class MaximumSubarray {
      * @return
      */
     public int maxSubArray2(int[] nums) {
-        int ans = nums[0];
-        // sum表示以当前num的前一个元素结尾的最大值
-        int sum = 0;
-        for (int num : nums) {
-            // 如果 sum > 0，则说明 sum 对结果有增益效果
-            if (sum > 0) {
-                sum += num;
-            } else {
-                sum = num;
-            }
-            ans = Math.max(ans, sum);
+        // sum表示以当前元素结尾和最大值
+        int sum = 0, maxAns = nums[0];
+        for (int x : nums) {
+            // sum < 0 ? x : sum + x
+            sum = Math.max(sum + x, x);
+            maxAns = Math.max(maxAns, sum);
         }
+        return maxAns;
+    }
+
+    // 打印最大连续子数组
+    public int[] printMaxSubArray(int[] nums) {
+        int maxSum = nums[0], curSum = nums[0];
+        int start = 0, end = 0, tempStart = 0;
+
+        for (int i = 1; i < nums.length; i++) {
+            // 以前一个元素结尾之和小于0，则重新当前下标开始计算当前和
+            if (curSum < 0) {
+                curSum = nums[i];
+                tempStart = i;
+            } else {
+                curSum += nums[i];
+            }
+            // 如果当前和大于最大和，则更新最大和及子数组的起始和结束索引
+            if (curSum > maxSum) {
+                maxSum = curSum;
+                start = tempStart;
+                end = i;
+            }
+        }
+        int[] ans = new int[end - start + 1];
+        System.arraycopy(nums, start, ans, 0, ans.length);
         return ans;
     }
+
 
     /**
      * 分治法
