@@ -54,4 +54,36 @@ public class MergeTwoSortedLists {
         cur.next = list1 == null ? list2 : list1;
         return newHead.next;
     }
+
+    // 合并链表并去除重复节点
+    public ListNode mergeTwoListsWithoutSameValue2(ListNode list1, ListNode list2) {
+        ListNode dummy = new ListNode(-1);
+        ListNode cur = dummy;
+        while (list1 != null || list2 != null) {
+            // 合并后链表与原链表的连接
+            cur.next = null;
+            while (list1 != null && list1.val == cur.val) {
+                list1 = list1.next;
+            }
+            while (list2 != null && list2.val == cur.val) {
+                list2 = list2.next;
+            }
+            if (list1 == null && list2 == null) {
+                return dummy.next;
+            }
+            // 最多一个null
+            // list1为null 或者 2个都不为null
+            if (list1 == null || (list2 != null && list1.val >= list2.val)) {
+                cur.next = list2;
+                cur = cur.next;
+                list2 = list2.next;
+            } else {
+                // list1 != null
+                cur.next = list1;
+                cur = cur.next;
+                list1 = list1.next;
+            }
+        }
+        return dummy.next;
+    }
 }
