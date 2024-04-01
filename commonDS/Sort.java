@@ -1,3 +1,6 @@
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 /**
  * @ClassName: Sort
  * @Description: 排序算法
@@ -17,6 +20,26 @@ public class Sort {
                 int pivotPos = partition(arr, left, right);
                 quickSort(arr, left, pivotPos - 1);
                 quickSort(arr, pivotPos + 1, right);
+            }
+        }
+
+        private void quickSort2(int[] arr, int left, int right) {
+            // 非递归实现quickSort
+            Deque<Integer> deque = new ArrayDeque<>();
+            deque.addLast(left);
+            deque.addLast(right);
+            while (!deque.isEmpty()){
+                int r = deque.removeLast();
+                int l = deque.removeLast();
+                if (l < r) {
+                    int pivotPos = partition(arr, l, r);
+                    // 可以看作左子树
+                    deque.addLast(l);
+                    deque.addLast(pivotPos - 1);
+                    // 可以看作右子树
+                    deque.addLast(pivotPos + 1);
+                    deque.addLast(r);
+                }
             }
         }
 
