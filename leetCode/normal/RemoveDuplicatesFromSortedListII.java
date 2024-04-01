@@ -15,25 +15,29 @@ public class RemoveDuplicatesFromSortedListII {
      * @return
      */
     public ListNode deleteDuplicates(ListNode head) {
-        ListNode ret = new ListNode(-1000), cur = ret;
-        ret.next = head;
-        while (cur.next != null) {
-            int nextVal = cur.next.val;
-            ListNode tmp = cur.next, pre = cur;
-            while (tmp != null && tmp.val == nextVal) {
-                pre = tmp;
+        ListNode dummy = new ListNode(-100);
+        dummy.next = head;
+        // 当前节点，当前节点前一个节点
+        ListNode cur = head, pre = dummy;
+        while (cur != null) {
+            int val = cur.val;
+            ListNode tmp = cur;
+            while (tmp != null && tmp.val == val) {
                 tmp = tmp.next;
             }
-            // cur->x-x(pre)->tmp/null x表示相同值的元素
-            if (cur.next != pre) {
-                cur.next = tmp;
-                // cur->x(pre)-tmp/null
-            } else {
-                cur = pre;
+            // pre->cur->tmp/null
+            if (cur.next == tmp) {
+                pre = pre.next;
+                cur = cur.next;
+            }else {
+                // pre->cur->xxx->tmp/null
+                pre.next = tmp;
+                cur = tmp;
             }
         }
-        return ret.next;
+        return dummy.next;
     }
+
 
     /**
      * 递归
