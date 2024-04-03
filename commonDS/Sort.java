@@ -28,7 +28,7 @@ public class Sort {
             Deque<Integer> deque = new ArrayDeque<>();
             deque.addLast(left);
             deque.addLast(right);
-            while (!deque.isEmpty()){
+            while (!deque.isEmpty()) {
                 int r = deque.removeLast();
                 int l = deque.removeLast();
                 if (l < r) {
@@ -145,6 +145,59 @@ public class Sort {
         }
     }
 
+    public class MergeSort {
+
+        public int[] sort(int[] arr) {
+            int len = arr.length;
+            mergeSort(arr, 0, len - 1, new int[len]);
+            return arr;
+        }
+
+        private void mergeSort(int[] nums, int left, int right, int[] temp) {
+            // 小区间使用其他排序例如插入排序
+            if (left == right) {
+                return;
+            }
+            int mid = (left + right) >> 1;
+            mergeSort(nums, left, mid, temp);
+            mergeSort(nums, mid + 1, right, temp);
+            // 如果数组的这个子区间本身有序（升序），无需合并
+            if (nums[mid] <= nums[mid + 1]) {
+                return;
+            }
+            mergeOfTwoSortedArray(nums, left, mid, right, temp);
+        }
+
+        private void mergeOfTwoSortedArray(int[] nums, int left, int mid, int right, int[] temp) {
+            //[left, mid] 有序，[mid + 1, right] 有序
+            // public static native void arraycopy(Object src, int  srcPos, Object dest, int destPos, int length);
+            System.arraycopy(nums, left, temp, left, right + 1 - left);
+            int i = left;
+            int j = mid + 1;
+            // 将tmp数组的那个有序部分，双指针有序插入原数组
+            for (int k = left; k <= right; k++) {
+                // i到底
+                if (i == mid + 1) {
+                    nums[k] = temp[j++];
+                    // j到底
+                } else if (j == right + 1) {
+                    nums[k] = temp[i++];
+                } else if (temp[i] <= temp[j]) {
+                    // 注意写成 < 就丢失了稳定性（相同元素原来靠前的排序以后依然靠前）
+                    nums[k] = temp[i++];
+                } else {
+                    // temp[i] > temp[j]
+                    nums[k] = temp[j++];
+                }
+            }
+        }
+    }
+
+    public class SortList {
+        // 148. 排序链表
+        // SortList
+    }
+
     public class BubbleSort {
         public int[] bubbleSort(int[] arr) {
             boolean flag = true;
@@ -214,58 +267,6 @@ public class Sort {
                 }
             }
             return arr;
-        }
-    }
-
-    public class MergeSort {
-
-        public int[] sort(int[] arr) {
-            int len = arr.length;
-            mergeSort(arr, 0, len - 1, new int[len]);
-            return arr;
-        }
-
-        private void mergeSort(int[] nums, int left, int right, int[] temp) {
-            // 小区间使用其他排序例如插入排序
-            if (left == right) {
-                return;
-            }
-            int mid = (left + right) >> 1;
-            mergeSort(nums, left, mid, temp);
-            mergeSort(nums, mid + 1, right, temp);
-            // 如果数组的这个子区间本身有序（升序），无需合并
-            if (nums[mid] <= nums[mid + 1]) {
-                return;
-            }
-            mergeOfTwoSortedArray(nums, left, mid, right, temp);
-        }
-
-        private void mergeOfTwoSortedArray(int[] nums, int left, int mid, int right, int[] temp) {
-            //[left, mid] 有序，[mid + 1, right] 有序
-            // public static native void arraycopy(Object src, int  srcPos, Object dest, int destPos, int length);
-            System.arraycopy(nums, left, temp, left, right + 1 - left);
-            int i = left;
-            int j = mid + 1;
-            // 将tmp数组的那个有序部分，双指针有序插入原数组
-            for (int k = left; k <= right; k++) {
-                // i到底
-                if (i == mid + 1) {
-                    nums[k] = temp[j];
-                    j++;
-                    // j到底
-                } else if (j == right + 1) {
-                    nums[k] = temp[i];
-                    i++;
-                } else if (temp[i] <= temp[j]) {
-                    // 注意写成 < 就丢失了稳定性（相同元素原来靠前的排序以后依然靠前）
-                    nums[k] = temp[i];
-                    i++;
-                } else {
-                    // temp[i] > temp[j]
-                    nums[k] = temp[j];
-                    j++;
-                }
-            }
         }
     }
 
