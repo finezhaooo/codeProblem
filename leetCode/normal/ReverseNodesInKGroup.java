@@ -9,51 +9,42 @@ import dependency.ListNode;
  * @Date: 2023/3/14/10:26
  */
 public class ReverseNodesInKGroup {
-    // 记录当前反转次数
     int counter = 0;
 
-    /**
-     * 记录反转部分的头尾节点
-     * O(1)的空间复杂度
-     * @param head
-     * @param k
-     * @return
-     */
     public ListNode reverseKGroup(ListNode head, int k) {
-        counter = k;
-        ListNode ret = reverseList(head, k);
-        // pre记录已反转部分尾节点
-        ListNode pre = head;
-        // 还有可以反转的部分
-        while (head.next != null) {
-            counter = k;
-            // pre记录已反转部分尾节点
-            pre = head;
-            // tmp记录未反转部分的头节点
-            ListNode tmp = head.next;
-            // 反转后tmp为已反转部分尾节点
-            head.next = reverseList(tmp, k);
-            head = tmp;
+        ListNode dummy = new ListNode(), pre = dummy, cur = head;
+        dummy.next = head;
+        // 是否还有下一个k组的头节点
+        while (pre.next != null) {
+            counter = 0;
+            cur = pre.next;
+            // 此时 head->xxx->cur/null->node/null
+            head = reverse(cur, k);
+            // 不足k个
+            if (counter < k) {
+                k = counter;
+                counter = 0;
+                // 反转最后counter个
+                head = reverse(head, k);
+            }
+            pre.next = head;
+            pre = cur;
         }
-        // 最后一组不足k个则反转回去
-        pre.next = (counter == 1 ? pre.next : reverseList(pre.next, k));
-        return ret;
+        return dummy.next;
     }
 
-
-    ListNode reverseList(ListNode head, int k) {
-        // cur记录已经反转部分的头节点
-        ListNode cur = head;
-        while (k > 1 && head.next != null) {
-            ListNode tmp = head.next.next;
-            head.next.next = cur;
-            // head.next保存原链表cur的下一个，即未反转部分的头节点
-            cur = head.next;
-            head.next = tmp;
-            k--;
+    private ListNode reverse(ListNode head, int k) {
+        ListNode pre = null, cur = head;
+        while (counter < k && cur != null) {
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+            counter++;
         }
-        counter = k;
-        // 此时tmp(head.next)为下一组要反转节点的头节点
-        return cur;
+        // (pre->xxx->head)->cur/null
+        // 将当前k组和下一组连接
+        head.next = cur;
+        return pre;
     }
 }
