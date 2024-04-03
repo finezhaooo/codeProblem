@@ -2,7 +2,7 @@ package normal;
 
 /**
  * @ClassName: MaximumSubarray
- * @Description:
+ * @Description: 53. 最大子数组和
  * @Author: zhaooo
  * @Date: 2023/8/16/10:10
  */
@@ -48,7 +48,6 @@ public class MaximumSubarray {
     public int[] printMaxSubArray(int[] nums) {
         int maxSum = nums[0], curSum = nums[0];
         int start = 0, end = 0, tempStart = 0;
-
         for (int i = 1; i < nums.length; i++) {
             // 以前一个元素结尾之和小于0，则重新当前下标开始计算当前和
             if (curSum < 0) {
