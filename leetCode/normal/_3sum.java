@@ -28,18 +28,24 @@ public class _3sum {
             int l = i + 1, r = nums.length - 1;
             int target = -nums[i];
             while (l < r) {
+                // 同一个l
+                if (l > i + 1 && nums[l] == nums[l - 1]) {
+                    l++;
+                    continue;
+                }
+                if (r < nums.length - 1 && nums[r] == nums[r + 1]) {
+                    r--;
+                    continue;
+                }
                 int sum = nums[l] + nums[r];
                 if (sum < target) {
-                    // 找到下一个不同l
-                    while (l < r && nums[l] == nums[++l]) ;
+                    l++;
                 } else if (sum > target) {
-                    // 找到下一个不同r
-                    while (l < r && nums[r] == nums[--r]) ;
+                    r--;
                 } else {
                     res.add(new ArrayList<>(Arrays.asList(nums[i], nums[l], nums[r])));
-                    // 防止出现重复和无限循环
-                    while (l < r && nums[l] == nums[++l]) ;
-                    while (l < r && nums[r] == nums[--r]) ;
+                    l++;
+                    r--;
                 }
             }
         }
@@ -84,7 +90,7 @@ public class _3sum {
                     break;
                 }
                 map[nums[j] - min]--;
-                // 判断剩下的数中是否有target - nums[j]
+                // 判断target - nums[j]在min和max之中，且剩下的数中有target - nums[j]
                 if (min <= target - nums[j] && max >= target - nums[j] && map[target - nums[j] - min] > 0) {
                     ans.add(new ArrayList<>(Arrays.asList(nums[i], nums[j], target - nums[j])));
                 }
