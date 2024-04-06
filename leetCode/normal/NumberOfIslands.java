@@ -1,7 +1,6 @@
 package normal;
 
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * @ClassName: NumberOfIslands
@@ -55,6 +54,56 @@ public class NumberOfIslands {
                 iDeque.addLast(i + dir[0]);
                 jDeque.addLast(j + dir[1]);
             }
+        }
+    }
+
+    int[] father;
+    int[] rank;
+
+    public int numIslands2(char[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        father = new int[m * n];
+        rank = new int[m * n];
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1') {
+                    int idx = i * n + j;
+                    father[idx] = idx;
+                    // 将该陆地和之前已经访问的陆地合并
+                    if (i - 1 >= 0 && grid[i + 1][j] == '1') {
+                        union(idx, (i + 1) * n + j);
+                    }
+                    if (j - 1 >= 0 && grid[i][j + 1] == '1') {
+                        union(idx, i * n + j + 1);
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1') {
+                    set.add(find(i * n + j));
+                }
+            }
+        }
+        return set.size();
+    }
+
+    public int find(int x) {
+        return x == father[x] ? x : (father[x] = find(father[x]));
+    }
+
+    public void union(int i, int j) {
+        int x = find(i), y = find(j);
+        if (rank[x] <= rank[y]) {
+            father[x] = y;
+        } else {
+            father[y] = x;
+        }
+        // 如果深度相同且根节点不同，则新的根节点的深度+1
+        if (rank[x] == rank[y] && x != y) {
+            rank[y]++;
         }
     }
 }
