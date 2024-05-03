@@ -8,62 +8,35 @@ package normal;
  */
 public class FindFirstAndLastPositionOfElementInSortedArray {
     /**
-     * 二分 + 循环不变量
-     * 参考 commonDS/BinarySearch.java
+     * lowerBound
      * @param nums
      * @param target
      * @return
      */
     public int[] searchRange(int[] nums, int target) {
-        int[] result = new int[]{-1, -1};
-        int left = 0;
-        int right = nums.length - 1;
-        if (nums.length == 0 || target < nums[left] || target > nums[right]) {
-            return result;
+        int lower = lowerBound(nums, target);
+        // lower的范围是[0,len] upper的范围是[-1,len-1]
+        if (lower == nums.length || nums[lower] != target) {
+            return new int[]{-1, -1};
         }
-        while (left <= right) {
-            int mid = (left + right) / 2;
-            if (nums[mid] == target) {
-                searchBoundary(nums, left, mid, target, true, result);
-                searchBoundary(nums, mid, right, target, false, result);
-                break;
-            } else if (nums[mid] > target) {
-                right = mid - 1;
-            } else {
-                left = mid + 1;
-            }
-        }
-        return result;
+        // lower是要左边界或者要插入的位置
+        // lower(target+1)-1 就是上边界
+        int upper = lowerBound(nums, target + 1);
+        return new int[]{lower, upper - 1};
     }
 
-    // 搜索边界
-    public void searchBoundary(int[] nums, int left, int right, int target, boolean searchL, int[] result) {
-        while (left <= right) {
-            int mid = (left + right) / 2;
-            if (nums[mid] == target) {
-                if (searchL) {
-                    if (mid == 0 || nums[mid - 1] != target) {
-                        result[0] = mid;
-                        break;
-                    } else {
-                        right = mid - 1;
-                    }
-                } else {
-                    if (mid == nums.length - 1 || nums[mid + 1] != target) {
-                        result[1] = mid;
-                        break;
-                    } else {
-                        left = mid + 1;
-                    }
-                }
-            } else if (nums[mid] > target) {
-                right = mid - 1;
+    public int lowerBound(int[] nums, int target) {
+        int l = 0, r = nums.length - 1;
+        while (l <= r) {
+            int mid = (l + r) / 2;
+            if (nums[mid] < target) {
+                l = mid + 1;
             } else {
-                left = mid + 1;
+                r = mid - 1;
             }
         }
+        return l;
     }
-
     /**
      * 二分 + 循环不变量
      * 参考 commonDS/BinarySearch.java
