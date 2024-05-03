@@ -1,10 +1,34 @@
 /**
  * @ClassName: BinarySearch
- * @Description: 二分查找 循环不遍变量
+ * @Description: 二分查找
  * @Author: zhaooo
  * @Date: 2022/8/28/20:28
  */
 public class BinarySearch {
+
+    /**
+     * lowerBound 返回第一个 >= target的数，即元素下标或者要插入的位置，其他情况可以修改条件得出
+     * > target 转化为 >= (target + 1)
+     * < target 转化为 (>= target) - 1
+     * <= target 转化为  (> target) - 1 转化为 (>= (target + 1)) - 1 即最后一个 <= target的数即元素下标或者要插入的前一个
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int lowerBound(int[] nums, int target) {
+        int l = 0, r = nums.length - 1;
+        while (l <= r) {
+            int mid = (l + r) / 2;
+            if (nums[mid] < target) {
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+        // < target | >= target
+        //        r | l
+        return l;
+    }
 
     /**
      * 找到target的下标，没找到返回插入位置
